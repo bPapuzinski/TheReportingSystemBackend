@@ -22,5 +22,6 @@ public class ReportModel {
     private String city;
     private String coordinate;
     private boolean active;
+    private int authorId;
 
 }

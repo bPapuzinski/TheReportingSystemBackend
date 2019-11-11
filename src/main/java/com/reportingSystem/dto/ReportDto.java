@@ -22,6 +22,8 @@ public class ReportDto {
     @NotNull
     private String coordinate;
     private boolean active;
+    @NotNull
+    private int authorId;
 
     @Override
     public String toString() {

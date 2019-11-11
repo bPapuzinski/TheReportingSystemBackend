@@ -61,4 +61,12 @@ public class ReportServiceImpl implements ReportService{
             throw new CustomNotFound("Report not found");
         }
     }
+
+    @Override
+    public List<SimpleReportDto> getReportListCreatedByUser(String id) {
+        return reportRepository.findAll().stream()
+                .filter(report -> report.getAuthorId() == Integer.parseInt(id))
+                .map(report -> mapper.map(report, SimpleReportDto.class))
+                .collect(Collectors.toList());
+    }
 }

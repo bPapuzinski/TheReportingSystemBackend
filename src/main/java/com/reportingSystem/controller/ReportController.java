@@ -6,8 +6,6 @@ import com.reportingSystem.exception.CustomResponse;
 import com.reportingSystem.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,5 +45,10 @@ public class ReportController {
         } catch (CustomNotFound notFound) {
             return ResponseEntity.status(404).body(new CustomResponse(404, notFound.getMessage()));
         }
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity getReportListCreatedByUser(@PathVariable String id) {
+            return ResponseEntity.status(200).body(reportService.getReportListCreatedByUser(id));
     }
 }
