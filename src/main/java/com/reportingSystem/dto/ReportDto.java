@@ -13,7 +13,7 @@ public class ReportDto {
     @NotNull
     private String description;
     @NotNull
-    private byte[] image;
+    private String image;
     @NotNull
     private String street;
     private String houseNumber;

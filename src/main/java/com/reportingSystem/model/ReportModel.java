@@ -16,7 +16,7 @@ public class ReportModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private byte[] image;
+    private String image;
     private String street;
     private String houseNumber;
     private String city;
