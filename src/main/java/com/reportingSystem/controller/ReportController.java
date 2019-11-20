@@ -49,6 +49,6 @@ public class ReportController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity getReportListCreatedByUser(@PathVariable String id) {
-            return ResponseEntity.status(200).body(reportService.getReportListCreatedByUser(id));
+        return ResponseEntity.status(200).body(reportService.getReportListCreatedByUser(id));
     }
 }

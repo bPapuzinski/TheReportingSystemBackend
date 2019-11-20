@@ -24,7 +24,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
         response.getWriter().write(new JSONObject()
-                .put("httpCode",200)
+                .put("httpCode", 200)
                 .put("message", "Logged")
                 .put("userId", userModel.getUserId()).toString());
     }

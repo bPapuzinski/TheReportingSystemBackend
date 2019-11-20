@@ -25,7 +25,7 @@ public class UserModel implements UserDetails {
     private String password;
     private String mobileNumber;
     private boolean status;
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<RoleModel> roles;
 
     @Override

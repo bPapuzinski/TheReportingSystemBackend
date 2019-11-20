@@ -20,7 +20,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.getWriter().write(new JSONObject()
-                .put("httpCode",401)
+                .put("httpCode", 401)
                 .put("message", "Unauthorized").toString());
     }
 }

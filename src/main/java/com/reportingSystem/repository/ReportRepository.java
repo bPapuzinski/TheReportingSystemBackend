@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ReportRepository extends JpaRepository<ReportModel, Integer>{
+public interface ReportRepository extends JpaRepository<ReportModel, Integer> {
 
-    Optional<ReportModel> findReportById (int id);
+    Optional<ReportModel> findReportById(int id);
 
     List<ReportModel> findAll();
 

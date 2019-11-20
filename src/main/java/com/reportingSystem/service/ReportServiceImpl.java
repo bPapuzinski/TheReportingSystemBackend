@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ReportServiceImpl implements ReportService{
+public class ReportServiceImpl implements ReportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
 
@@ -44,7 +44,7 @@ public class ReportServiceImpl implements ReportService{
     @Override
     public ReportDto getReportDetails(String id) {
         Optional<ReportModel> reportModel = reportRepository.findReportById(Integer.parseInt(id));
-        if(reportModel.isPresent()) {
+        if (reportModel.isPresent()) {
             return mapper.map(reportModel.get(), ReportDto.class);
         } else {
             throw new CustomNotFound("Report not found");
@@ -54,7 +54,7 @@ public class ReportServiceImpl implements ReportService{
     @Override
     public void deleteReport(String id) {
         Optional<ReportModel> reportModel = reportRepository.findReportById(Integer.parseInt(id));
-        if(reportModel.isPresent()) {
+        if (reportModel.isPresent()) {
             reportModel.get().setActive(false);
             reportRepository.save(reportModel.get());
         } else {
