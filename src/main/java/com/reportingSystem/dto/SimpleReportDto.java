@@ -8,7 +8,7 @@ import lombok.Setter;
 public class SimpleReportDto {
 
     private int id;
-    private String description;
+    private byte[] image;
     private String street;
     private String houseNumber;
     private String city;
