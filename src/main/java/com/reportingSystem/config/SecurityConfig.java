@@ -43,14 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterAt(authenticationFilter(), CustomUsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .permitAll()
-                .and()
                 .logout()
                 .permitAll();
     }

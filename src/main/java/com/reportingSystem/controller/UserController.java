@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping
 public class UserController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("user/{username}")
     public ResponseEntity getUserDetails(@PathVariable String username) {
         try {
             UserDto userDto = userService.getUserDetails(username);
