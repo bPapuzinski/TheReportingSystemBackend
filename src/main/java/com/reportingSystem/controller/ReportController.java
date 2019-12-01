@@ -6,6 +6,7 @@ import com.reportingSystem.exception.CustomResponse;
 import com.reportingSystem.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,16 +18,19 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
+    @Secured("ROLE_USER")
     @PostMapping
     public ResponseEntity addNewReport(@Valid @RequestBody ReportDto reportDto) {
         return ResponseEntity.status(201).body(reportService.addNewReport(reportDto));
     }
 
+    @Secured("ROLE_WORKER")
     @GetMapping
     public ResponseEntity getReportList() {
         return ResponseEntity.status(200).body(reportService.getReportList());
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/{id}")
     public ResponseEntity getReportDetails(@PathVariable String id) {
         try {
@@ -37,6 +41,7 @@ public class ReportController {
         }
     }
 
+    @Secured("ROLE_WORKER")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteReport(@PathVariable String id) {
         try {
@@ -47,6 +52,7 @@ public class ReportController {
         }
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/user/{id}")
     public ResponseEntity getReportListCreatedByUser(@PathVariable String id) {
         return ResponseEntity.status(200).body(reportService.getReportListCreatedByUser(id));

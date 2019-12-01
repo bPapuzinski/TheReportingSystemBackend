@@ -26,6 +26,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         response.getWriter().write(new JSONObject()
                 .put("httpCode", 200)
                 .put("message", "Logged")
-                .put("userId", userModel.getUserId()).toString());
+                .put("userId", userModel.getUserId())
+                .put("username", userModel.getUsername()) .toString());
     }
 }
