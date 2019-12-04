@@ -7,6 +7,7 @@ import com.reportingSystem.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,7 @@ public class ReportController {
         return ResponseEntity.status(201).body(reportService.addNewReport(reportDto));
     }
 
-    @Secured("ROLE_WORKER")
+    @PreAuthorize("hasRole('WORKER')")
     @GetMapping
     public ResponseEntity getReportList() {
         return ResponseEntity.status(200).body(reportService.getReportList());
