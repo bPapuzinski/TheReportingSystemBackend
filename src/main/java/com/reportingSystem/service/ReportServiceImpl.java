@@ -2,6 +2,7 @@ package com.reportingSystem.service;
 
 import com.reportingSystem.dto.ReportDto;
 import com.reportingSystem.dto.SimpleReportDto;
+import com.reportingSystem.dto.SimpleReportForWorkerDto;
 import com.reportingSystem.exception.CustomNotFound;
 import com.reportingSystem.mapper.DefaultMapper;
 import com.reportingSystem.model.ReportModel;
@@ -34,10 +35,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<SimpleReportDto> getReportList() {
+    public List<SimpleReportForWorkerDto> getReportList() {
         return reportRepository.findAll().stream()
-                .filter(ReportModel::isActive)
-                .map(report -> mapper.map(report, SimpleReportDto.class))
+                .map(report -> mapper.map(report, SimpleReportForWorkerDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -52,11 +52,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void deleteReport(String id) {
+    public boolean closeReport(String id) {
         Optional<ReportModel> reportModel = reportRepository.findReportById(Integer.parseInt(id));
         if (reportModel.isPresent()) {
-            reportModel.get().setActive(false);
-            reportRepository.save(reportModel.get());
+            reportModel.get().setActive(!reportModel.get().isActive());
+            return reportRepository.save(reportModel.get()).isActive();
         } else {
             throw new CustomNotFound("Report not found");
         }

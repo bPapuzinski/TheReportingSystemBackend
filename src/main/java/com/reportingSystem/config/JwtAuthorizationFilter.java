@@ -19,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.SignatureException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,14 +33,21 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws IOException, ServletException {
-        var authentication = getAuthentication(request);
-        if (authentication == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        if(!request.getMethod().equals("OPTIONS")) {
+            var authentication = getAuthentication(request);
+            if (authentication == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } else {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE");
+            response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-type");
+            //filterChain.doFilter(request, response);
+        }
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {

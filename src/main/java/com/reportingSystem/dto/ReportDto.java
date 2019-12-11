@@ -1,9 +1,12 @@
 package com.reportingSystem.dto;
 
+import com.reportingSystem.model.ReplayModel;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +27,8 @@ public class ReportDto {
     private boolean active;
     @NotNull
     private int authorId;
+    private Instant creationDate;
+    private List<ReplayModel> replayList;
 
     @Override
     public String toString() {

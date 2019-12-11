@@ -6,7 +6,6 @@ import com.reportingSystem.exception.CustomResponse;
 import com.reportingSystem.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +24,14 @@ public class ReportController {
         return ResponseEntity.status(201).body(reportService.addNewReport(reportDto));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_WORKER')")
+
+    @PreAuthorize("hasAuthority('ROLE_WORKER') or hasAuthority('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity getReportList() {
         return ResponseEntity.status(200).body(reportService.getReportList());
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_WORKER')")
     @GetMapping("/{id}")
     public ResponseEntity getReportDetails(@PathVariable String id) {
         try {
@@ -43,11 +43,14 @@ public class ReportController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_WORKER')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteReport(@PathVariable String id) {
+    @PutMapping("/{id}")
+    public ResponseEntity openCloseReport(@PathVariable String id) {
         try {
-            reportService.deleteReport(id);
-            return ResponseEntity.status(200).body(new CustomResponse(200, "Deleted"));
+            if(reportService.closeReport(id)) {
+                return ResponseEntity.status(200).body(new CustomResponse(200, "opened"));
+            } else {
+                return ResponseEntity.status(200).body(new CustomResponse(200, "closed"));
+            }
         } catch (CustomNotFound notFound) {
             return ResponseEntity.status(404).body(new CustomResponse(404, notFound.getMessage()));
         }

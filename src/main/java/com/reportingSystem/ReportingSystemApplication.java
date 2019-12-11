@@ -1,8 +1,9 @@
 package com.reportingSystem;
 
+import com.reportingSystem.dto.UserDto;
 import com.reportingSystem.model.RoleModel;
 import com.reportingSystem.repository.RoleRepository;
-import com.reportingSystem.repository.UserRepository;
+import com.reportingSystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,10 +20,22 @@ public class ReportingSystemApplication {
 	}
 
 	@Bean
-	CommandLineRunner init (RoleRepository roleRepository){
+	CommandLineRunner init (RoleRepository roleRepository, UserService userService){
 		return args -> {
-			List<String> names = Arrays.asList("ROLE_USER", "ROLE_WORKER", "ROLE_ADMIN");
-			names.forEach(name -> roleRepository.save(new RoleModel(name)));
+			if(roleRepository.findRoleModelByRoleName("ROLE_USER") == null) {
+				List<String> names = Arrays.asList("ROLE_USER", "ROLE_WORKER", "ROLE_ADMIN");
+				names.forEach(name -> roleRepository.save(new RoleModel(name)));
+			}
+			if(userService.getUser("admin") == null) {
+				UserDto user = new UserDto();
+				user.setEmail("admin");
+				user.setMobileNumber("662");
+				user.setStatus(true);
+				user.setUsername("admin");
+				user.setPassword(("admin"));
+				user.setRoles(Arrays.asList(roleRepository.findRoleModelByRoleName("ROLE_ADMIN")));
+				userService.createAdmin(user);
+			}
 		};
 	}
 }
