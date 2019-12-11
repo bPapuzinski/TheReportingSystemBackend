@@ -18,7 +18,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_WORKER') or hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity addNewReport(@Valid @RequestBody ReportDto reportDto) {
         return ResponseEntity.status(201).body(reportService.addNewReport(reportDto));
@@ -31,7 +31,7 @@ public class ReportController {
         return ResponseEntity.status(200).body(reportService.getReportList());
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_WORKER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_WORKER') or hasAuthority('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity getReportDetails(@PathVariable String id) {
         try {
@@ -42,7 +42,7 @@ public class ReportController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROLE_WORKER')")
+    @PreAuthorize("hasAuthority('ROLE_WORKER') or hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity openCloseReport(@PathVariable String id) {
         try {
@@ -56,7 +56,7 @@ public class ReportController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_WORKER') or hasAuthority('ROLE_ADMIN')")
     @GetMapping("/user/{id}")
     public ResponseEntity getReportListCreatedByUser(@PathVariable String id) {
         return ResponseEntity.status(200).body(reportService.getReportListCreatedByUser(id));

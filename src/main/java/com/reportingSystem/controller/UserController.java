@@ -41,7 +41,7 @@ public class UserController {
             return ResponseEntity.status(409).body(new CustomResponse(409, e.getMessage()));
         }
     }
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("user/{username}")
     public ResponseEntity getUserDetails(@PathVariable String username) {
         try {
