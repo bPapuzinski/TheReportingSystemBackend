@@ -2,9 +2,11 @@ package com.reportingSystem.service;
 
 import com.reportingSystem.dto.SimpleUserDto;
 import com.reportingSystem.dto.UserDto;
+import com.reportingSystem.exception.CanNotDemoteAdmin;
 import com.reportingSystem.exception.CustomNotFound;
 import com.reportingSystem.exception.NotUniqueUser;
 import com.reportingSystem.mapper.DefaultMapper;
+import com.reportingSystem.model.RoleModel;
 import com.reportingSystem.model.UserModel;
 import com.reportingSystem.repository.RoleRepository;
 import com.reportingSystem.repository.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,6 +94,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<SimpleUserDto> getUsersList() {
         return userRepository.findAll().stream().map(user -> mapperFacade.map(user, SimpleUserDto.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto changeUserRole(String username, String roleId) {
+        UserModel user = userRepository.findUserModelByUsername(username);
+        if(user != null) {
+            if(user.getRoles().contains(roleRepository.findRoleModelByRoleName("ROLE_ADMIN"))) {
+                throw new CanNotDemoteAdmin("Admin can not be demoted");
+            } else {
+                List<RoleModel> roles = new ArrayList<>();
+                roles.add(roleRepository.findById(Integer.parseInt(roleId)).get());
+                user.setRoles(roles);
+                return mapperFacade.map(userRepository.save(user), UserDto.class);
+            }
+        } else {
+            throw new CustomNotFound("User not found");
+        }
     }
 
     @Override

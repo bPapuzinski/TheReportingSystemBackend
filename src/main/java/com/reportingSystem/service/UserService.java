@@ -18,4 +18,6 @@ public interface UserService {
     UserDto getUserDetails(String username);
 
     List<SimpleUserDto> getUsersList();
+
+    UserDto changeUserRole(String username, String roleId);
 }

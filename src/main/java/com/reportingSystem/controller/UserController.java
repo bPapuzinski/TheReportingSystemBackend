@@ -2,6 +2,7 @@ package com.reportingSystem.controller;
 
 import com.reportingSystem.dto.SimpleUserDto;
 import com.reportingSystem.dto.UserDto;
+import com.reportingSystem.exception.CanNotDemoteAdmin;
 import com.reportingSystem.exception.CustomNotFound;
 import com.reportingSystem.exception.CustomResponse;
 import com.reportingSystem.exception.NotUniqueUser;
@@ -41,6 +42,7 @@ public class UserController {
             return ResponseEntity.status(409).body(new CustomResponse(409, e.getMessage()));
         }
     }
+
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("user/{username}")
     public ResponseEntity getUserDetails(@PathVariable String username) {
@@ -56,6 +58,19 @@ public class UserController {
     @GetMapping("user")
     public List<SimpleUserDto> getUsersList() {
         return userService.getUsersList();
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("user/{username}/role/{roleId}")
+    public ResponseEntity changeUserRole(@PathVariable String username, @PathVariable String roleId) {
+        try {
+            UserDto userDto = userService.changeUserRole(username, roleId);
+            return ResponseEntity.status(200).body(userDto);
+        } catch (CanNotDemoteAdmin e) {
+            return ResponseEntity.status(400).body(new CustomResponse(400, e.getMessage()));
+        } catch (CustomNotFound e) {
+            return ResponseEntity.status(404).body(new CustomResponse(404, e.getMessage()));
+        }
     }
 
 }
